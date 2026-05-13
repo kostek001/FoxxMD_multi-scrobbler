@@ -614,6 +614,8 @@ export const listenToNaivePlay = (listen: ListenResponse): PlayObject => {
                     artist_mbids = [],
                     duration: aDuration,
                     duration_ms: aDurationMs,
+                    duration_played: aDurationPlayed,
+                    duration_played_ms: aDurationPlayedMs,
                     music_service_name,
                     music_service,
                     submission_client,
@@ -634,6 +636,11 @@ export const listenToNaivePlay = (listen: ListenResponse): PlayObject => {
         let dur = aDuration;
         if (dur === undefined && aDurationMs !== undefined) {
             dur = Math.round(aDurationMs / 1000);
+        }
+
+        let listenedDur = aDurationPlayed;
+        if (listenedDur === undefined && aDurationPlayedMs !== undefined) {
+            listenedDur = Math.round(aDurationPlayedMs / 1000);
         }
 
         let normalTrackName = track_name;
@@ -670,7 +677,6 @@ export const listenToNaivePlay = (listen: ListenResponse): PlayObject => {
             albumArtists = unique([...(albumArtists ?? []), ...release_artist_names])
         }
 
-
         const play: PlayObjectLifecycleless = {
             data: {
                 playDate: dayjs.unix(listened_at),
@@ -686,7 +692,8 @@ export const listenToNaivePlay = (listen: ListenResponse): PlayObject => {
             meta: {
                 source: submission_client ?? 'listenbrainz',
                 playId,
-                deviceId: combinePartsToString([music_service_name ?? music_service, submission_client, submission_client_version])
+                deviceId: combinePartsToString([music_service_name ?? music_service, submission_client, submission_client_version]),
+                trackProgressPosition: listenedDur
             }
         }
 

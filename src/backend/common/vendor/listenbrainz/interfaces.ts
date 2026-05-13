@@ -100,6 +100,9 @@ export interface AdditionalTrackInfo {
     albumartist?: string;
 
     tracknumber?: number
+
+    duration_played?: number;
+    duration_played_ms?: number;
 }
 export interface Track {
     artist_name: string;
